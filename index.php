@@ -337,9 +337,21 @@
                                             <tbody>
                                             <?php
                                                 $conn=mysqli_connect('localhost','root','','atron');
-                                                $query='SELECT * FROM current_occupancy';
+                                                // Langkah 1. Tentukan batas,cek halaman & posisi data
+                                                $batas   = 10;
+                                                $halaman = @$_GET['halaman'];
+                                                if(empty($halaman)){
+                                                    $posisi  = 0;
+                                                    $halaman = 1;
+                                                }
+                                                else{ 
+                                                  $posisi  = ($halaman-1) * $batas; 
+                                                }
+
+                                                // Langkah 2. Sesuaikan query dengan posisi dan batas
+                                                $query  = "SELECT * FROM current_occupancy LIMIT $posisi,$batas";
                                                 $result=mysqli_query($conn,$query);
-                                                while($output=mysqli_fetch_assoc($result)){
+                                                while ($output=mysqli_fetch_array($result)){
                                             echo '<tr>';
                                                 echo '<td class="text-center">'.$output['regional'].'</td>';
                                                 echo '<td class="text-center">'.$output['city'].'</td>';
@@ -403,11 +415,36 @@
                                                     echo '<td class="text-center"><button class="btn-transition btn btn-outline-success">'.$output['yearly_highest'].'%</button></td>';
                                                 }
                                             echo '</tr>';
-                                        
                                             }
                                             ?>
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <?php 
+                                        $conn=mysqli_connect('localhost','root','','atron');
+                                        $query2     = mysqli_query($conn, "select * from current_occupancy");
+                                        $jmldata    = mysqli_num_rows($query2);
+                                        $jmlhalaman = ceil($jmldata/$batas);
+
+                                        echo "<div class='card-body'><h5 class='card-title'>Page</h5> 
+                                        <nav class='' aria-label='Page navigation example'>
+                                            <ul class='pagination'>";
+
+                                        for($i=1;$i<=$jmlhalaman;$i++)
+                                        if ($i != $halaman){
+                                         echo " <li class='page-item'>
+                                                    <a href=\"index.php?halaman=$i\" class='page-link'>$i</a>
+                                                </li>";
+                                        }
+                                        else{ 
+                                         echo " <li class='page-item'>
+                                                    <a href=\"javascript:void(0);\" class='page-link'><b>$i</b></a>
+                                                </li>"; 
+                                        }
+
+                                    ?>
+                                            </ul>
+                                        </nav>
                                     </div>
                                 </div>
                             </div>

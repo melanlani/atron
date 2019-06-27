@@ -34,9 +34,15 @@
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">Menu</li>
                                 <li>
-                                    <a href="index.php" class="mm-active">
+                                    <a href="index.php?home">
                                         <i class="metismenu-icon pe-7s-home"></i>
                                         Dashboard
+                                    </a>
+                                </li>
+                                <li >
+                                    <a href="grafik.php">
+                                        <i class="metismenu-icon pe-7s-graph1"></i>
+                                        Grafik 
                                     </a>
                                 </li>
                                 <li>

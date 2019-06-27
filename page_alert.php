@@ -211,7 +211,7 @@
                                 $value = $_REQUEST['reg'];
                                 $value1= $_REQUEST['angka'];
                                 $conn = mysqli_connect('localhost','root','','atron');
-                                $query="select regional, city, site_id, site_name, bw, current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where current>='$value1' and regional = '$value' group by current_id";
+                                $query="select regional, city, site_id, site_name, bw, current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where current<='$value1' and regional = '$value' group by current_id";
                                 $result=mysqli_query($conn,$query);
                                 echo '<div class="row">';
                                     echo '<div class="col-md-12">';
