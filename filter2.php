@@ -3,7 +3,7 @@
 	if($_POST['request']){
 		$request = $_POST['request'];
 		$conn = mysqli_connect('localhost','root','','atron');
-		$query="select city, up, middle, down, SUM(up) as total_up , SUM(middle) as total_middle, SUM(down) as total_down from city_occupancy where id_occupancy='$request' group by city";
+		$query="select city, site_id, up, middle, down, SUM(up) as total_up , SUM(middle) as total_middle, SUM(down) as total_down from city_occupancy where id_occupancy='$request' group by city";
 		$result=mysqli_query($conn,$query);
 	    $total_up = 0;
       $total_middle = 0;
@@ -13,20 +13,21 @@
           echo '<thead>';
             echo '<tr>';
               echo '<th class="text-center">Witel</th>';
-              echo '<th class="text-center"><div class="badge badge-success">UP</div></th>';
-              echo '<th class="text-center"><div class="badge badge-warning">Middle</div></th>';
-              echo '<th class="text-center"><div class="badge badge-danger">Down</div></th>';
+              echo '<th class="text-center"><div class="badge badge-success">50%</div></th>';
+              echo '<th class="text-center"><div class="badge badge-warning">50%-70%</div></th>';
+              echo '<th class="text-center"><div class="badge badge-danger">>70%</div></th>';
               echo ' <th class="text-center"><div class="badge badge-primary">Total</div></th>';
             echo '</tr>';
           echo '</thead>';
          while ($output=mysqli_fetch_assoc($result)) {
          $one = $output['up'] +$output['down']+$output['middle'];
+         $city = $output['city'];
             echo '<tbody>';
               echo '<tr>';
                 echo '<td class="text-center">'.$output['city'].'</td>';
-                echo '<td class="text-center"><button class="btn-transition btn btn-outline-success">'.$output['up'].'</button></td>';
-                echo '<td class="text-center"><button class="btn-transition btn btn-outline-warning">'.$output['middle'].'</button></td>';
-                echo '<td class="text-center"><button class="btn-transition btn btn-outline-danger">'.$output['down'].'</button></td>';
+                echo '<td class="text-center"><a class="btn-transition btn btn-outline-success" href="index.php?page=city_alert1&city='.$city.'">'.$output['up'].'</button></td>';
+                echo '<td class="text-center"><a class="btn-transition btn btn-outline-warning" href="index.php?page=city_alert2&city='.$city.'">'.$output['middle'].'</button></td>';
+                echo '<td class="text-center"><a class="btn-transition btn btn-outline-danger" href="index.php?page=city_alert3&city='.$city.'">'.$output['down'].'</button></td>';
                 echo '<td class="text-center"><div class="btn-transition btn btn-outline-primary">'.$one.'</span></td>';
               echo '</tr>';
             echo '</tbody>';
@@ -71,11 +72,11 @@
            $angka=$output['up'];
               echo '<tbody>';
                 echo '<tr>';
-                  echo '<td class="text-center" id="value_reg">'.$output['regional'].'</td>';
-                  echo '<td class="text-center"><a class="btn-transition btn btn-outline-success" href="page_alert.php?reg='.$up.'&angka='.$angka.'">'.$output['up'].'</button></td>';
-                  echo '<td class="text-center"><a class="btn-transition btn btn-outline-warning" href="page_alert2.php?reg='.$up.'">'.$output['middle'].'</button></td>';
-                  echo '<td class="text-center"><a class="btn-transition btn btn-outline-danger" href="page_alert3.php?reg='.$up.'&angka='.$angka.'">>'.$output['down'].'</button></td>';
-                  echo '<td class="text-center"><button class="btn-transition btn btn-outline-primary">'.$one.'</button></td></td>';
+                   echo '<td class="text-center" id="value_reg">'.$output['regional'].'</td>';
+                            echo '<td class="text-center"><a class="btn-transition btn btn-outline-success" href="index.php?page=alert1&reg='.$up.'&angka='.$angka.'">'.$output['up'].'</button></td>';
+                            echo '<td class="text-center"><a class="btn-transition btn btn-outline-warning" href="index.php?page=alert2&reg='.$up.'">'.$output['middle'].'</button></td>';
+                            echo '<td class="text-center"><a class="btn-transition btn btn-outline-danger" href="index.php?page=alert3&reg='.$up.'">'.$output['down'].'</button></td>';
+                            echo '<td class="text-center"><button class="btn-transition btn btn-outline-primary">'.$one.'</button></td></td>';
                 echo '</tr>';
               echo '</tbody>';
               $total_up += $output['total_up'];

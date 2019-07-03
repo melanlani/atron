@@ -1,13 +1,15 @@
 <?php
-if($_POST['down'] !=''){
-		$down = $_POST['down'];
+	
+	if($_POST['occ'] !=''){
+		$occ = $_POST['occ'];
+		$value2= 70;
 		$conn = mysqli_connect('localhost','root','','atron');
-		$query="select regional, city, site_id, site_name, bw, status,current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where status='$down' group by current_id";
+		$query="select regional, city, site_id, site_name, bw, current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where current between '$occ' and '$value2' group by current_id";
 		$result=mysqli_query($conn,$query);
 		echo '<div class="row">';
             echo '<div class="col-md-12">';
                 echo '<div class="main-card mb-3 card">';
-                    echo '<div class="card-header">NODE B OVERVIEW > NODE B STATUS > DOWN</div>';
+                    echo '<div class="card-header">NODE B OVERVIEW > OCCUPANCY</div>';
                     echo '<div class="table-responsive">';
 						echo '<table class="align-middle mb-0 table table-borderless table-striped table-hover">';
 					      echo '<thead>';
@@ -39,7 +41,7 @@ if($_POST['down'] !=''){
 				                echo '<td class="text-center">'.$output['site_id'].'</td>';
 				                echo '<td class="text-center">'.$output['site_name'].'</td>';
 				                echo '<td class="text-center">'.$output['bw'].'</td>';
-				                if ($output['status'] == 'up'){
+				                if ($output['current'] >=50){
 				                    echo '<td class="text-center"><i class="pe-7s-angle-up-circle icon-gradient bg-malibu-beach" style="font-size:35px"></i></td>';
 				                } else{      
 				                    echo '<td class="text-center"><i class="pe-7s-angle-down-circle icon-gradient bg-ripe-malin" style="font-size:35px"></i></td>';
@@ -104,9 +106,10 @@ if($_POST['down'] !=''){
 			echo '</div>';
 		echo '</div>';
 		mysqli_close($conn);
-    }
+    } 
+    
+?>
 
- ?>
 
 <script type="text/javascript" src="./assets/scripts/main.js"></script>
 <script>

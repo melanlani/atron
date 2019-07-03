@@ -3,7 +3,7 @@
 	if($_POST['up'] !=''){
 		$up = $_POST['up'];
 		$conn = mysqli_connect('localhost','root','','atron');
-		$query="select regional, city, site_id, site_name, bw, current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where current>'$up' group by current_id";
+		$query="select regional, city, site_id, status,site_name, bw, current, aging, today_highest, weekly_highest, monthly_highest, yearly_highest from current_occupancy where status='$up' group by current_id";
 		$result=mysqli_query($conn,$query);
 		echo '<div class="row">';
             echo '<div class="col-md-12">';
@@ -29,13 +29,17 @@
 					      	echo '</thead>';
 				         	echo '<tbody>';
 				         while ($output=mysqli_fetch_assoc($result)) {
-				              echo '<tr>';
-				                echo '<td class="text-center">'.$output['regional'].'</td>';
+				              echo '<tr>';if($output['regional']==1){
+                                echo '<td class="text-center">I</td>';
+	                            }
+	                            else if($output['regional']==2){
+	                                echo '<td class="text-center">II</td>';
+	                            }
 				                echo '<td class="text-center">'.$output['city'].'</td>';
 				                echo '<td class="text-center">'.$output['site_id'].'</td>';
 				                echo '<td class="text-center">'.$output['site_name'].'</td>';
 				                echo '<td class="text-center">'.$output['bw'].'</td>';
-				                if ($output['current'] >=50){
+				                if ($output['status'] =='up'){
 				                    echo '<td class="text-center"><i class="pe-7s-angle-up-circle icon-gradient bg-malibu-beach" style="font-size:35px"></i></td>';
 				                } else{      
 				                    echo '<td class="text-center"><i class="pe-7s-angle-down-circle icon-gradient bg-ripe-malin" style="font-size:35px"></i></td>';
@@ -103,3 +107,29 @@
     } 
     
 ?>
+
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+<script>
+  $(document).ready(function(){
+
+    $("#filter_reg").on('change', function()
+    {
+    var value = $(this).val();
+      $.ajax(
+      {
+        url: 'filter3.php',
+        type: 'POST',
+        data: {request: value, req: 'up'},
+        beforeSend:function()
+        {
+          $("#table-status").html('Working On...')
+        },
+        success:function(data)
+        {
+          $("#table-status").html(data);
+        },
+      });
+    });
+});
+
+</script>
